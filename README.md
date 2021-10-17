@@ -9,8 +9,6 @@
 
 Trabalho apresentado ao curso [BI MASTER](https://ica.puc-rio.ai/bi-master) como pré-requisito para conclusão de curso e obtenção de crédito na disciplina "Projetos de Sistemas Inteligentes de Apoio à Decisão".
 
-- [Notebook iniciado no colab](https://github.com/brunorfo/POC-BIMaster-Brain-Tumor/blob/main/TCC_Brain_tumor.ipynb). <!-- caso não aplicável, remover esta linha -->
-
 - [Notebook kaggle](https://github.com/brunorfo/POC-BIMaster-Brain-Tumor/blob/main/notebook1a3375ef89_final.ipynb). <!-- caso não aplicável, remover esta linha -->
 
 - [Competição kaggle](https://www.kaggle.com/c/rsna-miccai-brain-tumor-radiogenomic-classification)
