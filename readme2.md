@@ -38,6 +38,8 @@ Dentro das subpastas de cada paciente e tipo de ressonância, temos arquivos do 
 
 Além dos diretórios acima, temos um arquivo CSV que contém a classificação para a presença do MGMT e o identificador de cada paciente. O ojetivo é desenvolver um modelo capaz de dizer a probabilidade de cada indivíduo ter o MGMT.
 
+Devido a restrições do ambiente de desenvolvimento do kaggle, utilizamos apenas parte do dataset neste trabalho.
+
 
 
 ### 2. Modelagem
@@ -204,7 +206,7 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(
 )
 ```
 
-Como se tratava de um desafio de classificação de imagens, optamos pela utilização de uma rede neural convolucional uma vez que esse tipo de rede é o que apresenta os melhores resultados ao se lidar com imagem. Num primeiro momento elaboramos uma rede simples com apenas quatro camadas de forma experimental.   
+Como se tratava de um desafio de classificação de imagens, optamos pela utilização de uma rede neural convolucional, uma vez que esse tipo de rede é o que apresenta os melhores resultados ao se lidar com imagem. Num primeiro momento, elaboramos uma rede simples com apenas quatro camadas de forma experimental.   
 
 ```python
 def make_model(input_shape):
@@ -391,14 +393,97 @@ Epoch 20/20
 <tensorflow.python.keras.callbacks.History at 0x7f514bc06110>
 ```
 
+Já o modelo dois, que tem como base o Xception, obtemos uma acurácia próxima de 80%.
 
-Finalizado o treinamento, o modelo foi salvo em arquivo do formato ".h5" e posteriormente restaurado e utilizado para fazer as predições das imagens de teste, obtendo assim as probalidades de cada imagem serem do tipo com presença de MGMT ou não.
+Resultado do segundo modelo
+```python
+Epoch 1/20
+308/308 [==============================] - 152s 478ms/step - loss: 0.6826 - binary_accuracy: 0.6167 - val_loss: 0.5724 - val_binary_accuracy: 0.6908
+Epoch 2/20
+308/308 [==============================] - 146s 472ms/step - loss: 0.6004 - binary_accuracy: 0.6893 - val_loss: 0.5349 - val_binary_accuracy: 0.7323
+Epoch 3/20
+308/308 [==============================] - 146s 472ms/step - loss: 0.5515 - binary_accuracy: 0.7122 - val_loss: 0.5093 - val_binary_accuracy: 0.7482
+Epoch 4/20
+308/308 [==============================] - 146s 472ms/step - loss: 0.5214 - binary_accuracy: 0.7281 - val_loss: 0.5214 - val_binary_accuracy: 0.7347
+Epoch 5/20
+308/308 [==============================] - 146s 472ms/step - loss: 0.5127 - binary_accuracy: 0.7476 - val_loss: 0.4891 - val_binary_accuracy: 0.7624
+Epoch 6/20
+308/308 [==============================] - 147s 473ms/step - loss: 0.4894 - binary_accuracy: 0.7540 - val_loss: 0.5035 - val_binary_accuracy: 0.7531
+Epoch 7/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4829 - binary_accuracy: 0.7640 - val_loss: 0.4712 - val_binary_accuracy: 0.7710
+Epoch 8/20
+308/308 [==============================] - 147s 472ms/step - loss: 0.4746 - binary_accuracy: 0.7698 - val_loss: 0.4639 - val_binary_accuracy: 0.7693
+Epoch 9/20
+308/308 [==============================] - 147s 472ms/step - loss: 0.4652 - binary_accuracy: 0.7762 - val_loss: 0.4589 - val_binary_accuracy: 0.7799
+Epoch 10/20
+308/308 [==============================] - 146s 472ms/step - loss: 0.4549 - binary_accuracy: 0.7860 - val_loss: 0.4715 - val_binary_accuracy: 0.7669
+Epoch 11/20
+308/308 [==============================] - 146s 472ms/step - loss: 0.4544 - binary_accuracy: 0.7874 - val_loss: 0.4609 - val_binary_accuracy: 0.7730
+Epoch 12/20
+308/308 [==============================] - 146s 470ms/step - loss: 0.4442 - binary_accuracy: 0.7948 - val_loss: 0.4519 - val_binary_accuracy: 0.7799
+Epoch 13/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4393 - binary_accuracy: 0.7957 - val_loss: 0.4516 - val_binary_accuracy: 0.7795
+Epoch 14/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4329 - binary_accuracy: 0.7968 - val_loss: 0.4439 - val_binary_accuracy: 0.7884
+Epoch 15/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4285 - binary_accuracy: 0.8024 - val_loss: 0.4667 - val_binary_accuracy: 0.7685
+Epoch 16/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4254 - binary_accuracy: 0.8059 - val_loss: 0.4350 - val_binary_accuracy: 0.7958
+Epoch 17/20
+308/308 [==============================] - 147s 472ms/step - loss: 0.4189 - binary_accuracy: 0.8115 - val_loss: 0.4641 - val_binary_accuracy: 0.7811
+Epoch 18/20
+308/308 [==============================] - 146s 470ms/step - loss: 0.4204 - binary_accuracy: 0.8051 - val_loss: 0.4326 - val_binary_accuracy: 0.7962
+Epoch 19/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4164 - binary_accuracy: 0.8066 - val_loss: 0.4320 - val_binary_accuracy: 0.7905
+Epoch 20/20
+308/308 [==============================] - 146s 471ms/step - loss: 0.4107 - binary_accuracy: 0.8124 - val_loss: 0.4281 - val_binary_accuracy: 0.7978
 
+<tensorflow.python.keras.callbacks.History at 0x7f512c1f4c10>
+```
 
+Finalizado o treinamento, os modelos foram salvos em arquivos do formato ".h5" para posteriormente serem restaurados e utilizados para fazer as predições das imagens de teste. Para fins desse trabalho, utilizamos diretamente o modelo treinado sem restaurarmos de arquivo.    
+Ao aplicar nosso segundo modelo, obtemos as probalidades de cada imagem ter presença de MGMT ou não.
+
+```python
+#restored_model = keras.models.load_model("/kaggle/input/saved-models/transfer_save_at_17.h5")
+#restored_model.summary()
+predictions = []
+i = 0
+for file in os.listdir(PNG_TEST_DIR)[:100]:
+    image = tf.keras.preprocessing.image.load_img(os.path.join(PNG_TEST_DIR, file),
+                                                  target_size=image_size)
+    input_arr = keras.preprocessing.image.img_to_array(image)
+    input_arr = np.array([input_arr])  # Convert single image to a batch.
+    predictions.append([file, model_2.predict(input_arr)])
+predictions
+```
+```
+[['test-00082-FLAIR-Image-113.png', array([[0.05473313]], dtype=float32)],
+ ['test-00013-T2w-Image-269.png', array([[0.647184]], dtype=float32)],
+ ['test-00079-T2w-Image-281.png', array([[0.21394956]], dtype=float32)],
+ ['test-00015-T1wCE-Image-163.png', array([[0.17550711]], dtype=float32)],
+ ['test-00080-FLAIR-Image-306.png', array([[0.44676653]], dtype=float32)],
+ ['test-00082-FLAIR-Image-295.png', array([[0.7266254]], dtype=float32)],
+ ['test-00013-T2w-Image-83.png', array([[0.44098884]], dtype=float32)],
+ ['test-00013-FLAIR-Image-424.png', array([[0.3264906]], dtype=float32)],
+ ['test-00082-T1w-Image-9.png', array([[0.6909217]], dtype=float32)],
+ ['test-00047-FLAIR-Image-28.png', array([[0.24077713]], dtype=float32)],
+ ['test-00091-FLAIR-Image-326.png', array([[0.15971619]], dtype=float32)],
+ ['test-00047-FLAIR-Image-150.png', array([[0.20528059]], dtype=float32)],
+ ['test-00080-T2w-Image-87.png', array([[0.91539294]], dtype=float32)],
+ ['test-00080-T2w-Image-144.png', array([[0.78349453]], dtype=float32)],
+ ['test-00001-T2w-Image-354.png', array([[0.00290455]], dtype=float32)],
+ ['test-00027-T1wCE-Image-103.png', array([[0.11121766]], dtype=float32)],
+ ['test-00082-T2w-Image-124.png', array([[0.537534]], dtype=float32)],
+ ['test-00091-FLAIR-Image-316.png', array([[0.16906482]], dtype=float32)],
+ ['test-00015-T1wCE-Image-91.png', array([[0.33880532]], dtype=float32)],
+ ['test-00079-T2w-Image-79.png', array([[0.43134928]], dtype=float32)],
+ ['test-00015-FLAIR-Image-482.png', array([[0.49448198]], dtype=float32)],
+```
 
 ### 4. Conclusões
 
-
+A elaborar esse trabalho
 
 ---
 
