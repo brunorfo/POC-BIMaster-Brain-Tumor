@@ -30,20 +30,52 @@ Atualmente para identificar se um cancer de cérebro tem o MGMT e definir o melh
 
 O dataset é da competição da RSNA de Classificação de Tumor Cerebral hospedado no Kaggke é componsto por imagens de ressonância magnética multiparamétrica, contendo para cada paciente quatro tipos de imagens, sendo elas a Fluid Attenuated Inversion Recovery (FLAIR), T1-weighted pre-contrast (T1w), T1-weighted post-contrast (T1Gd) e T2-weighted (T2). Para simplificação do problema, o modelo proposto usou como referência cada imagem individual e a classificação de presença do MGMT ou não no paciente, transformando cada arquivo em uma entrada individual da rede neural com sua classificação atribuída.
  
-A estrutura dos diretórios fornecidos pela RSNA é da seguinte forma:
+Foram fornecidos duas pastas, a Train e Test contendo cada uma a seguinte estrutura:
+
+![image](https://user-images.githubusercontent.com/5642575/138534621-b7bad8e2-bb33-4c0b-929a-6942ce1c1586.png)
+
+Dentro das subpastas de cada paciente e tipo de ressonância, temos arquivos do tipo DICOM que é o padrão utilizado na medicina.
+
+Além dos diretórios acima, temos um arquivo CSV que contém a classificação para a presença do MGMT e o identificador de cada paciente. O ojetivo é desenvolver um modelo capaz de dizer a probabilidade de cada indivíduo ter o MGMT.
+
 
 
 ### 2. Modelagem
 
-Como se tratava de um desafio de classificação de imagens, optamos pela utilização de uma rede neural convolucional uma vez que esse tipo de rede é o que apresenta os melhores resultados ao se lidar com imagem. Num primeiro momento elaboramos uma rede simples com apenas quatro camadas de forma experimental, porém não obtivemos uma acurácia satisfatória e a rede não apresentava evolução no aprendizado. Foi utilizado então uma rede Xception pré-treinada fazendo assim um processo de transferência de aprendizado para o nosso problema. Ao treinar a nossa nova rede, passamos a observar a evolução no modelo proposto, conseguindo uma acurácia de aproximadamente setenta e nove porcento e sendo considerado satisfatória.
+Nesse trabalho, optamos pela linguagem Python que é amplamente utilizada pela comunidade de ciência de dados.
+Definimos algumas constantes para melhor organização do código e para armazenar as imagens convertidas em PNG.
 
+```python
+# Declaração de constantes
+TRAIN_FOLDER = 'train'
+TEST_FOLDER = 'test'
+mri_types = collections.namedtuple('mri_types', ['FLAIR', 'T1W', 'T1WCE', 'T2W'])
+MRI_TYPES = mri_types('FLAIR', 'T1w', 'T1wCE', 'T2w')
+PNG_DATASET_DIR = '/kaggle/working/png_dataset'
+PNG_TEST_DIR = '/kaggle/working/png_test'
+WITH_MGMT_DIR = '/kaggle/working/png_dataset/with_mgmt'
+WITHOUT_MGMT_DIR = '/kaggle/working/png_dataset/without_mgmt'
+```
 
+Como se tratava de um desafio de classificação de imagens, optamos pela utilização de uma rede neural convolucional uma vez que esse tipo de rede é o que apresenta os melhores resultados ao se lidar com imagem. Num primeiro momento elaboramos uma rede simples com apenas quatro camadas de forma experimental. Na sequência, foi utilizado então uma rede Xception pré-treinada fazendo assim um processo de transferência de aprendizado para o nosso problema. 
+
+```python
+def img_loader(path):
+    ds = dcmread(os.path.join(INPUTDIR_PATH, path))
+    if (ds.pixel_array.sum() != 0):
+        arr = ds.pixel_array
+        # arr = tf.constant(arr)
+        return arr
+    else:
+        return 0
+```
 
 ### 3. Resultados
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar nisl vestibulum tortor fringilla, eget imperdiet neque condimentum. Proin vitae augue in nulla vehicula porttitor sit amet quis sapien. Nam rutrum mollis ligula, et semper justo maximus accumsan. Integer scelerisque egestas arcu, ac laoreet odio aliquet at. Sed sed bibendum dolor. Vestibulum commodo sodales erat, ut placerat nulla vulputate eu. In hac habitasse platea dictumst. Cras interdum bibendum sapien a vehicula.
 
 Finalizado o treinamento, o modelo foi salvo em arquivo do formato ".h5" e posteriormente restaurado e utilizado para fazer as predições das imagens de teste, obtendo assim as probalidades de cada imagem serem do tipo com presença de MGMT ou não.
+
 
 
 ### 4. Conclusões
