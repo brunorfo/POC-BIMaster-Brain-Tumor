@@ -396,7 +396,7 @@ Epoch 20/20
 Já o modelo dois, que tem como base o Xception, obtemos uma acurácia próxima de 80%.
 
 Resultado do segundo modelo
-```python
+```
 Epoch 1/20
 308/308 [==============================] - 152s 478ms/step - loss: 0.6826 - binary_accuracy: 0.6167 - val_loss: 0.5724 - val_binary_accuracy: 0.6908
 Epoch 2/20
@@ -483,7 +483,11 @@ predictions
 
 ### 4. Conclusões
 
-A elaborar esse trabalho
+Ao elaborar esse trabalho, podemos verificar uma aplicação de deep learning com grande impacto benéfico em pacientes com tumores cerebrais, melhorando assim suas chances de cura e sobrevida.
+
+Vimos também que ao utilizar bibliotecas como o Tensorflow e Keras facilitam o trabalho de desenvolvimento, uma vez que eles já nos trazem ferramentas prontas para uso na resolução dos nossos problemas.
+
+Um ponto a melhorar no futuro seria realizar um ajuste fino do segundo modelo, transformando os parâmetros internos da base em treináveis e fazer um novo treinamento com poucas épocas e um otimizador com ganho pequeno para dessa forma aumentar a acurácia final. 
 
 ---
 
