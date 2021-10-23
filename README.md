@@ -8,9 +8,9 @@
 Trabalho apresentado ao curso [BI MASTER](https://ica.puc-rio.ai/bi-master) como pré-requisito para conclusão de curso e obtenção de crédito na disciplina "Projetos de Sistemas Inteligentes de Apoio à Decisão".
 
 
-- [Notebook kaggle](https://github.com/brunorfo/POC-BIMaster-Brain-Tumor/blob/main/notebook1a3375ef89_final.ipynb). <!-- caso não aplicável, remover esta linha -->
+- [Notebook kaggle](https://github.com/brunorfo/POC-BIMaster-Brain-Tumor/blob/main/notebook1a3375ef89_final.ipynb)    
 
-- [Competição kaggle](https://www.kaggle.com/c/rsna-miccai-brain-tumor-radiogenomic-classification)
+- [Competição kaggle](https://www.kaggle.com/c/rsna-miccai-brain-tumor-radiogenomic-classification)    
 
 
 ---
@@ -19,25 +19,25 @@ Trabalho apresentado ao curso [BI MASTER](https://ica.puc-rio.ai/bi-master) como
 
 
 
-O trabalho de conclusão de curso será a elaboração de uma rede neural para classificação da presença da sequência genética em tumores de cérebro conhecido como *MGMT promoter methylation* em imagens de ressonância magnética multiparamétricas. Esse problema foi proposto em uma competição hospedada na plataforma *Kaggle* e que tinha como patrocinadora a *Radiological Society of North America (RSNA)* que é uma organização sem fins lucrativos.
+O trabalho de conclusão de curso será a elaboração de uma rede neural para classificação da presença da sequência genética em tumores de cérebro conhecido como *MGMT promoter methylation* em imagens de ressonância magnética multiparamétrica. Esse problema foi proposto em uma competição hospedada na plataforma *Kaggle* e que tinha como patrocinadora a *Radiological Society of North America (RSNA)* que é uma organização sem fins lucrativos.
 
-Atualmente para identificar se um cancer de cérebro tem o *MGMT* e definir o melhor tratamento, é preciso fazer a extração de uma pequena amostra e fazer a análise genética, o que pode levar várias semanas. Utilizando técnicas de inteligência artificial para determinar se um paciente tem ou não a presença do *MGMT* no tumor cerebral, os médicos podem tomar decisões de tratamento mais rápido que os métodos atuais e aumentar as chances de cura do paciente.
+Atualmente para identificar se um câncer de cérebro tem o *MGMT* e definir o melhor tratamento, é preciso fazer a extração de uma pequena amostra e fazer a análise genética, o que pode levar várias semanas. Utilizando técnicas de inteligência artificial para determinar se um paciente tem ou não a presença do *MGMT* no tumor cerebral, os médicos podem tomar decisões de tratamento mais rápido que os métodos atuais e aumentar as chances de cura do paciente.
 
 
 
 ### 1. Introdução
 
-O dataset é da competição da *RSNA* de Classificação de Tumor Cerebral hospedado no *Kaggle* é componsto por imagens de ressonância magnética multiparamétrica, contendo para cada paciente quatro tipos de imagens, sendo elas a *Fluid Attenuated Inversion Recovery (FLAIR)*, *T1-weighted pre-contrast (T1w)*, *T1-weighted post-contrast (T1Gd)* e *T2-weighted (T2)*. Para simplificação do problema, o modelo proposto usou como referência cada imagem individual e a classificação de presença do *MGMT* ou não no paciente, transformando cada arquivo em uma entrada individual da rede neural com sua classificação atribuída.
+O *dataset* é da competição da *RSNA* de Classificação de Tumor Cerebral hospedado no *Kaggle* é composto por imagens de ressonância magnética multiparamétrica, contendo para cada paciente quatro tipos de imagens, sendo elas a *Fluid Attenuated Inversion Recovery (FLAIR)*, *T1-weighted pre-contrast (T1w)*, *T1-weighted post-contrast (T1Gd)* e *T2-weighted (T2)*. Para simplificação do problema, o modelo proposto usou como referência cada imagem individual e a classificação de presença do *MGMT* ou não no paciente, transformando cada arquivo em uma entrada individual da rede neural com sua classificação atribuída.
  
-Foram fornecidos duas pastas, a *Train* e *Test* contendo cada uma a seguinte estrutura:
+Foram fornecidas duas pastas, a *TRAIN* e *TEST* contendo cada uma a seguinte estrutura:
 
 ![image](https://user-images.githubusercontent.com/5642575/138534621-b7bad8e2-bb33-4c0b-929a-6942ce1c1586.png)
 
 Dentro das subpastas de cada paciente e tipo de ressonância, temos arquivos do tipo *DICOM* que é o padrão utilizado na medicina.
 
-Além dos diretórios acima, temos um arquivo *CSV* que contém a classificação para a presença do *MGMT* e o identificador de cada paciente. O ojetivo é desenvolver um modelo capaz de dizer a probabilidade de cada indivíduo ter o *MGMT*.
+Além dos diretórios acima, temos um arquivo *CSV* que contém a classificação para a presença do *MGMT* e o identificador de cada paciente. O objetivo é desenvolver um modelo capaz de dizer a probabilidade de cada indivíduo ter o *MGMT*.
 
-Devido a restrições do ambiente de desenvolvimento do *Kaggle*, utilizamos apenas parte do dataset neste trabalho.
+Devido a restrições do ambiente de desenvolvimento do *Kaggle*, utilizamos apenas parte do *dataset* neste trabalho.
 
 
 
@@ -59,9 +59,9 @@ WITHOUT_MGMT_DIR = '/kaggle/working/png_dataset/without_mgmt'
 ```
 
 Em seguida, criamos três funções auxiliares.
-A `img_loader(path)` é para carregar a imagem *DICOM*, verificar se é uma imagem vazia e retornar ela no formato de *array*. Caso o arquivo seja vazio, retorna 0.  
-A função `png_save(path)` chama o método acima, verifica se é um *array* ou 0 e caso seja um *array*, converte e salva a imagem *DICOM* no formato *PNG*.  
-E `imgs_path_finder(folder, patient)` percorre todos os pacientes e seus respectivos subdiretórios e retorna o caminho de cada arquivo *DICOM* de forma ordenada no formato de uma lista.
+A *`img_loader(path)`* é para carregar a imagem *DICOM*, verificar se é uma imagem vazia e retornar ela no formato de *array*. Caso o arquivo seja vazio, retorna 0.  
+A função *`png_save(path)`* chama o método acima, verifica se é um *array* ou 0 e caso seja um *array*, converte e salva a imagem *DICOM* no formato *PNG*.  
+E *`imgs_path_finder(folder, patient)`* percorre todos os pacientes e seus respectivos subdiretórios e retorna o caminho de cada arquivo *DICOM* de forma ordenada no formato de uma lista.
 
 ```python
 def img_loader(path):
@@ -96,7 +96,7 @@ def imgs_path_finder(folder, patient):
     return image_path
 ```
 
-Criamos então duas variáveis para armazenar a lista de pacientes dos diretórios *train* e *test*.
+Criamos então duas variáveis para armazenar a lista de pacientes dos diretórios *TRAIN* e *TEST*.
 
 ```python
 # Lista os pacientes que fazem parte do diretório de treinamento
@@ -131,7 +131,7 @@ print('Número de pacientes no diretório de treino', len(train_patients))
 Número de pacientes no diretório de treino 582
 ```
 Criado a lista contendo uma *tuple* com o identificador do paciente, o caminho da imagem *DICOM* e a classificação de presença de *MGMT* para o diretório *TRAIN*.   
-Gerado também a lista com uma tuple com o identificador do paciente e o caminho da imagem *DICOM* para o diretório *TEST*. Não foi fornecido no *dataset* da competição a classificação de *MGMT* para a pasta *TEST*.
+Gerado também a lista com uma *tuple* com o identificador do paciente e o caminho da imagem *DICOM* para o diretório *TEST*. Não foi fornecido no *dataset* da competição a classificação de *MGMT* para a pasta *TEST*.
 
 ```python
 # retorna uma lista de duas dimensões
@@ -344,7 +344,7 @@ model_2.fit(train_ds, epochs=epochs, callbacks=callbacks, validation_data=val_ds
 
 ### 3. Resultados
 
-Ao treinarmos o nosso primeiro modelo e observando a saída do método *fit*, podemos perceber que a nossa rede não performa adequadamente, inclusive aparentemente ela não faz nenhum tipo de aprendizado significativo após a segunda época.
+Ao treinarmos o nosso primeiro modelo e observando a saída do método *fit*, podemos perceber que a nossa rede não performa adequadamente, inclusive ela aparentemente não faz nenhum tipo de aprendizado significativo após a segunda época.
 
 Resultado do primeiro modelo
 ```
@@ -440,7 +440,7 @@ Epoch 20/20
 <tensorflow.python.keras.callbacks.History at 0x7f512c1f4c10>
 ```
 
-Finalizado o treinamento, os modelos foram salvos em arquivos do formato `.h5` para posteriormente serem restaurados e utilizados para fazer as predições das imagens de teste. Para fins desse trabalho, utilizamos diretamente o modelo treinado sem restaurarmos de arquivo.    
+Finalizado o treinamento, os modelos foram salvos em arquivos do formato *`.h5`* para posteriormente serem restaurados e utilizados para fazer as predições das imagens de teste. Para fins desse trabalho, utilizamos diretamente o modelo treinado sem restaurarmos de arquivo.    
 Ao aplicar nosso segundo modelo, obtemos as probalidades de cada imagem ter presença de *MGMT* ou não.
 
 ```python
