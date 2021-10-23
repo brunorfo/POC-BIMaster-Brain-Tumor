@@ -1,5 +1,4 @@
-<!-- antes de enviar a versão final, solicitamos que todos os comentários, colocados para orientação ao aluno, sejam removidos do arquivo -->
-# POC-BIMaster-Brain-Tumor
+# Análise de Tumores Cerebrais com *Deep Learning*
 
 #### Aluno: [Bruno Rodrigues](https://github.com/brunorfo).
 #### Orientadora: [Manoela Kohler](https://github.com/manoelakohler).
@@ -8,7 +7,7 @@
 
 Trabalho apresentado ao curso [BI MASTER](https://ica.puc-rio.ai/bi-master) como pré-requisito para conclusão de curso e obtenção de crédito na disciplina "Projetos de Sistemas Inteligentes de Apoio à Decisão".
 
-<!-- para os links a seguir, caso os arquivos estejam no mesmo repositório que este README, não há necessidade de incluir o link completo: basta incluir o nome do arquivo, com extensão, que o GitHub completa o link corretamente -->
+
 - [Notebook kaggle](https://github.com/brunorfo/POC-BIMaster-Brain-Tumor/blob/main/notebook1a3375ef89_final.ipynb). <!-- caso não aplicável, remover esta linha -->
 
 - [Competição kaggle](https://www.kaggle.com/c/rsna-miccai-brain-tumor-radiogenomic-classification)
@@ -20,32 +19,32 @@ Trabalho apresentado ao curso [BI MASTER](https://ica.puc-rio.ai/bi-master) como
 
 
 
-O trabalho de conclusão de curso será a elaboração de uma rede neural para classificação da presença da sequência genética em tumores de cérebro conhecido como MGMT promoter methylation em imagens de ressonância magnética multiparamétricas. Esse problema foi proposto em uma competição hospedada na plataforma Kaggle e que tinha como patrocinadora a Radiological Society of North America (RSNA) que é uma organização sem fins lucrativos.
+O trabalho de conclusão de curso será a elaboração de uma rede neural para classificação da presença da sequência genética em tumores de cérebro conhecido como *MGMT promoter methylation* em imagens de ressonância magnética multiparamétricas. Esse problema foi proposto em uma competição hospedada na plataforma *Kaggle* e que tinha como patrocinadora a *Radiological Society of North America (RSNA)* que é uma organização sem fins lucrativos.
 
-Atualmente para identificar se um cancer de cérebro tem o MGMT e definir o melhor tratamento, é preciso fazer a extração de uma pequena amostra e fazer a análise genética, o que pode levar várias semanas. Utilizando técnicas de inteligência artificial para determinar se um paciente tem ou não a presença do MGMT no tumor cerebral, os médicos podem tomar decisões de tratamento mais rápido que os métodos atuais e aumentar as chances de cura do paciente.
+Atualmente para identificar se um cancer de cérebro tem o *MGMT* e definir o melhor tratamento, é preciso fazer a extração de uma pequena amostra e fazer a análise genética, o que pode levar várias semanas. Utilizando técnicas de inteligência artificial para determinar se um paciente tem ou não a presença do *MGMT* no tumor cerebral, os médicos podem tomar decisões de tratamento mais rápido que os métodos atuais e aumentar as chances de cura do paciente.
 
 
 
 ### 1. Introdução
 
-O dataset é da competição da RSNA de Classificação de Tumor Cerebral hospedado no Kaggke é componsto por imagens de ressonância magnética multiparamétrica, contendo para cada paciente quatro tipos de imagens, sendo elas a Fluid Attenuated Inversion Recovery (FLAIR), T1-weighted pre-contrast (T1w), T1-weighted post-contrast (T1Gd) e T2-weighted (T2). Para simplificação do problema, o modelo proposto usou como referência cada imagem individual e a classificação de presença do MGMT ou não no paciente, transformando cada arquivo em uma entrada individual da rede neural com sua classificação atribuída.
+O dataset é da competição da *RSNA* de Classificação de Tumor Cerebral hospedado no *Kaggle* é componsto por imagens de ressonância magnética multiparamétrica, contendo para cada paciente quatro tipos de imagens, sendo elas a *Fluid Attenuated Inversion Recovery (FLAIR)*, *T1-weighted pre-contrast (T1w)*, *T1-weighted post-contrast (T1Gd)* e *T2-weighted (T2)*. Para simplificação do problema, o modelo proposto usou como referência cada imagem individual e a classificação de presença do *MGMT* ou não no paciente, transformando cada arquivo em uma entrada individual da rede neural com sua classificação atribuída.
  
-Foram fornecidos duas pastas, a Train e Test contendo cada uma a seguinte estrutura:
+Foram fornecidos duas pastas, a *Train* e *Test* contendo cada uma a seguinte estrutura:
 
 ![image](https://user-images.githubusercontent.com/5642575/138534621-b7bad8e2-bb33-4c0b-929a-6942ce1c1586.png)
 
-Dentro das subpastas de cada paciente e tipo de ressonância, temos arquivos do tipo DICOM que é o padrão utilizado na medicina.
+Dentro das subpastas de cada paciente e tipo de ressonância, temos arquivos do tipo *DICOM* que é o padrão utilizado na medicina.
 
-Além dos diretórios acima, temos um arquivo CSV que contém a classificação para a presença do MGMT e o identificador de cada paciente. O ojetivo é desenvolver um modelo capaz de dizer a probabilidade de cada indivíduo ter o MGMT.
+Além dos diretórios acima, temos um arquivo *CSV* que contém a classificação para a presença do *MGMT* e o identificador de cada paciente. O ojetivo é desenvolver um modelo capaz de dizer a probabilidade de cada indivíduo ter o *MGMT*.
 
-Devido a restrições do ambiente de desenvolvimento do kaggle, utilizamos apenas parte do dataset neste trabalho.
+Devido a restrições do ambiente de desenvolvimento do *Kaggle*, utilizamos apenas parte do dataset neste trabalho.
 
 
 
 ### 2. Modelagem
 
-Nesse trabalho, optamos pela linguagem Python que é amplamente utilizada pela comunidade de ciência de dados.
-Definimos algumas constantes para melhor organização do código e para armazenar as imagens convertidas em PNG.
+Nesse trabalho, optamos pela linguagem *Python* que é amplamente utilizada pela comunidade de ciência de dados.
+Definimos algumas constantes para melhor organização do código e para armazenar as imagens convertidas em *PNG*.
 
 ```python
 # Declaração de constantes
@@ -60,9 +59,9 @@ WITHOUT_MGMT_DIR = '/kaggle/working/png_dataset/without_mgmt'
 ```
 
 Em seguida, criamos três funções auxiliares.
-A `img_loader(path)` é para carregar a imagem DICOM, verificar se é uma imagem vazia e retornar ela no formato de array. Caso o arquivo seja vazio, retorna 0.  
-A função `png_save(path)` chama o método acima, verifica se é uma array ou 0 e caso seja um array, converte e salva a imagem DICOM no formato PNG.  
-E `imgs_path_finder(folder, patient)` percorre todos os pacientes e seus respectivos subdiretórios e retorna o caminho de cada arquivo DICOM de forma ordenada no formato de uma lista.
+A `img_loader(path)` é para carregar a imagem *DICOM*, verificar se é uma imagem vazia e retornar ela no formato de *array*. Caso o arquivo seja vazio, retorna 0.  
+A função `png_save(path)` chama o método acima, verifica se é um *array* ou 0 e caso seja um *array*, converte e salva a imagem *DICOM* no formato *PNG*.  
+E `imgs_path_finder(folder, patient)` percorre todos os pacientes e seus respectivos subdiretórios e retorna o caminho de cada arquivo *DICOM* de forma ordenada no formato de uma lista.
 
 ```python
 def img_loader(path):
@@ -115,7 +114,7 @@ Número de pacientes no diretório de teste 87
 Total de pacientes 672   
 ```
 
-Na descrição da competição, foi informado que os diretórios dos três pacientes 00109, 00123 e 00709 estavam gerando erro no processo de treinamento e orientavam realizar a exclusão deles. A função abaixo serve para eliminar as pastas dos três pacientes. Criado então uma função de exclusão para esses três casos.
+Na descrição da competição, foi informado que os diretórios dos três pacientes 00109, 00123 e 00709 estavam gerando erro no processo de treinamento e orientavam realizar a exclusão deles. A função abaixo serve para eliminar as pastas dos três pacientes.   
 
 ```python
 # Exclusão dos pacientes 00109, 00123, 00709 devido a falha do dataset
@@ -131,8 +130,8 @@ print('Número de pacientes no diretório de treino', len(train_patients))
 ```
 Número de pacientes no diretório de treino 582
 ```
-Criado a lista contendo uma tuple com o identificador do paciente, o caminho da imagem DICOM e a classificação de presença de MGMT para o diretório TRAIN.   
-Gerado também a lista com uma tuple com o identificador do paciente e o caminho da imagem DICOM para o diretório TEST. Não foi fornecido no dataset da competição a classificação de MGMT.
+Criado a lista contendo uma *tuple* com o identificador do paciente, o caminho da imagem *DICOM* e a classificação de presença de *MGMT* para o diretório *TRAIN*.   
+Gerado também a lista com uma tuple com o identificador do paciente e o caminho da imagem *DICOM* para o diretório *TEST*. Não foi fornecido no *dataset* da competição a classificação de *MGMT* para a pasta *TEST*.
 
 ```python
 # retorna uma lista de duas dimensões
@@ -154,9 +153,9 @@ for patient in test_patients[:10]:
     ])
 ```
 
-Através do código abaixo, verificamos para cada paciente o Label de classificação para MGMT e chamamos as funções auxiliares para carregar e salvar os arquivos PNG na seguinte estrutura:    
+Através do código abaixo, verificamos para cada paciente o *Label* de classificação para *MGMT* e chamamos as funções auxiliares para carregar e salvar os arquivos *PNG* na seguinte estrutura:    
 ![image](https://user-images.githubusercontent.com/5642575/138535799-ee406eeb-4a97-4280-b7a5-6ba5eda11ba5.png)    
-Esse tipo de estrutura foi escolhido para utilizar as facilidades da biblioteca Keras que, a partir desse formato de diretórios, gera automaticamente um dataset para ser utilizado no treinamento dos modelos de rede neural. O Keras entende os subdiretórios WITH_MGMT_DIR e WITHOUT_MGMT_DIR como sendo a categoria e fazendo a associação dessa classe a cada imagem dentro do subdiretório.
+Esse tipo de estrutura foi escolhido para utilizar as facilidades da biblioteca *Keras* que, a partir desse formato de diretórios, gera automaticamente um *dataset* para ser utilizado no treinamento dos modelos de rede neural. O *Keras* entende os subdiretórios *WITH_MGMT_DIR* e *WITHOUT_MGMT_DIR* como sendo a categoria e fazendo a associação dessa classe a cada imagem dentro do subdiretório.
 
 ```python
 for patient in images_path:
@@ -172,7 +171,7 @@ for patient in images_path:
         os.chdir(INPUTDIR_PATH)
 ```
 
-Aqui simplesmente buscamos as imagens de cada paciente no diretório TEST, convertemos em PNG e salvamos na pasta PNG_TEST_DIR.
+Aqui simplesmente buscamos as imagens de cada paciente no diretório *TEST*, convertemos em *PNG* e salvamos na pasta *PNG_TEST_DIR*.
 
 ```python
 os.chdir(PNG_TEST_DIR)
@@ -182,7 +181,7 @@ for patient in test_images_path:
 os.chdir(INPUTDIR_PATH)
 ```
 
-Após especificar o tamanho das nossas imagens e do batch, utilizamos a API do Keras para automaticamente criarmos os datasets de treinamento e validação que iremos utilizar no modelo CNN. Configuramos através dos parâmetros "validation_split" e "subset" a porcentagem de 20% para validação e a divisão do diretório de imagens em dois para treino e validação.
+Após especificar o tamanho das nossas imagens e do *batch*, utilizamos a *API* do *Keras* para automaticamente criarmos os *datasets* de treinamento e validação que iremos utilizar no modelo *CNN*. Configuramos através dos parâmetros *validation_split* e *subset* a porcentagem de 20% para validação e a divisão do diretório de imagens em dois para treino e validação.
 
 ```python
 image_size = (512, 512)
@@ -267,8 +266,8 @@ Non-trainable params: 192
 _________________________________________________________________
 ```
 
-Definimos então o número de épocas e uma função para salvar o melhor modelo encontrado durante treinamento. Ao compilar o modelo, escolhemos como otimizador o Adam,
-função de perda do tipo "binary_crossentropy", uma vez que nosso problema é do tipo tem ou não MGMT, e como métrica a acurácia.
+Definimos então o número de épocas e uma função para salvar o melhor modelo encontrado durante treinamento. Ao compilar o modelo, escolhemos como otimizador o *Adam*,
+função de perda do tipo *binary_crossentropy*, uma vez que nosso problema é do tipo tem ou não *MGMT*, e como métrica a acurácia.
 
 ```python
 epochs = 20
@@ -286,8 +285,8 @@ model.fit(
 )
 ```
 
-Para melhorarmos nossa classificação, optamos na sequência por um modelo pré-treinado utilizando para isso a técnica de transferência de aprendizado. No nosso caso, escolhemos o Xception. O próprio Keras fornece um método para obtermos esse modelo com os pesos pré-treinados no dataset do Imagenet.   
-Para permitir que o modelo se adeque ao nosso problema, não incluímos a última camada de classificação do Xception ao criarmos nosso modelo base de rede neural.
+Para melhorarmos nossa classificação, optamos na sequência por um modelo pré-treinado utilizando para isso a técnica de transferência de aprendizado. No nosso caso, escolhemos o *Xception*. O próprio *Keras* fornece um método para obtermos esse modelo com os pesos pré-treinados no *dataset* do *Imagenet*.   
+Para permitir que o modelo se adeque ao nosso problema, não incluímos a última camada de classificação do *Xception* ao criarmos nosso modelo base de rede neural.
 
 ```python
 base_model = keras.applications.Xception(
@@ -296,7 +295,7 @@ base_model = keras.applications.Xception(
     include_top=False)  # Do not include the ImageNet classifier at the top.
 ```
 
-Congelamos então os parâmetros do modelo base para não alterarmos os pesos já pré-treinados e criamos a partir dele um novo modelo, adicionando mais duas camdas, sendo a última a nossa camada de classificação.
+Congelamos então os parâmetros do modelo base para não alterarmos os pesos já pré-treinados e criamos a partir dele um novo modelo, adicionando mais duas camadas, sendo a última a nossa camada de classificação.
 
 ```python
 base_model.trainable = False
@@ -345,7 +344,7 @@ model_2.fit(train_ds, epochs=epochs, callbacks=callbacks, validation_data=val_ds
 
 ### 3. Resultados
 
-Ao treinarmos o nosso primeiro modelo e observando a saída do método "fit", podemos perceber que a nossa rede não performa de forma adequada, inclusive aparentemente ela não faz nenhum tipo de aprendizado significativo após a segunda época.
+Ao treinarmos o nosso primeiro modelo e observando a saída do método *fit*, podemos perceber que a nossa rede não performa adequadamente, inclusive aparentemente ela não faz nenhum tipo de aprendizado significativo após a segunda época.
 
 Resultado do primeiro modelo
 ```
@@ -393,7 +392,7 @@ Epoch 20/20
 <tensorflow.python.keras.callbacks.History at 0x7f514bc06110>
 ```
 
-Já o modelo dois, que tem como base o Xception, obtemos uma acurácia próxima de 80%.
+Já o modelo dois, que tem como base o *Xception*, obtemos uma acurácia próxima de 80%.
 
 Resultado do segundo modelo
 ```
@@ -441,8 +440,8 @@ Epoch 20/20
 <tensorflow.python.keras.callbacks.History at 0x7f512c1f4c10>
 ```
 
-Finalizado o treinamento, os modelos foram salvos em arquivos do formato ".h5" para posteriormente serem restaurados e utilizados para fazer as predições das imagens de teste. Para fins desse trabalho, utilizamos diretamente o modelo treinado sem restaurarmos de arquivo.    
-Ao aplicar nosso segundo modelo, obtemos as probalidades de cada imagem ter presença de MGMT ou não.
+Finalizado o treinamento, os modelos foram salvos em arquivos do formato `.h5` para posteriormente serem restaurados e utilizados para fazer as predições das imagens de teste. Para fins desse trabalho, utilizamos diretamente o modelo treinado sem restaurarmos de arquivo.    
+Ao aplicar nosso segundo modelo, obtemos as probalidades de cada imagem ter presença de *MGMT* ou não.
 
 ```python
 #restored_model = keras.models.load_model("/kaggle/input/saved-models/transfer_save_at_17.h5")
@@ -483,11 +482,11 @@ predictions
 
 ### 4. Conclusões
 
-Ao elaborar esse trabalho, podemos verificar uma aplicação de deep learning com grande impacto benéfico em pacientes com tumores cerebrais, melhorando assim suas chances de cura e sobrevida.
+Ao elaborar esse trabalho, podemos verificar uma aplicação de *deep learning* com grande impacto benéfico em pacientes com tumores cerebrais, melhorando assim suas chances de cura e sobrevida.
 
-Vimos também que ao utilizar bibliotecas como o Tensorflow e Keras facilitam o trabalho de desenvolvimento, uma vez que eles já nos trazem ferramentas prontas para uso na resolução dos nossos problemas.
+Vimos também que ao utilizar bibliotecas como o *Tensorflow* e *Keras* facilitam o trabalho de desenvolvimento, uma vez que eles já nos trazem ferramentas prontas para uso na resolução dos nossos problemas.
 
-Um ponto a melhorar no futuro seria realizar um ajuste fino do segundo modelo, transformando os parâmetros internos da base em treináveis e fazer um novo treinamento com poucas épocas e um otimizador com ganho pequeno para dessa forma aumentar a acurácia final. 
+Um ponto a melhorar no futuro seria realizar um ajuste fino do segundo modelo, transformando os parâmetros internos da base em treináveis e fazer um novo treinamento com poucas épocas e um otimizador com ganho pequeno para dessa forma aumentarmos a acurácia final. 
 
 ---
 
